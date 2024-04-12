@@ -148,9 +148,10 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="EBO.cpp" />
-    <ClCompile Include="FinalProject.cpp" />
+    <ClCompile Include="main.cpp" />
     <ClCompile Include="glad.c" />
     <ClCompile Include="shaderClass.cpp" />
+    <ClCompile Include="stb.cpp" />
     <ClCompile Include="VAO.cpp" />
     <ClCompile Include="VBO.cpp" />
   </ItemGroup>
