@@ -24,12 +24,12 @@ int main()
     glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
 
     GLfloat vertices[] = {
-        -0.5f, 0.5f * sqrt(3.0f) / 3.0f,0.0f,
+        -0.5f, -0.5f * sqrt(3.0f) / 3.0f,0.0f,
         0.5f, -0.5f * sqrt(3.0f) / 3.0f, 0.0f,
-        0.0f, 0.5f * sqrt(3.0f) / 3.0f * 2, 0.0f
+        0.0f, 0.5f * 2 * sqrt(3.0f) / 3.0f, 0.0f
     };
 
-    GLFWwindow* window = glfwCreateWindow(800, 600, "MATH214 Final Project", NULL, NULL);
+    GLFWwindow* window = glfwCreateWindow(800, 800, "MATH214 Final Project", NULL, NULL);
     if (window == NULL)
     {
         std::cout << "Failed to create GLFW window\n";
@@ -41,7 +41,7 @@ int main()
     gladLoadGL();
 
 
-    glViewport(0, 0, 800, 600);
+    glViewport(0, 0, 800, 800);
 
     GLuint vertexShader = glCreateShader(GL_VERTEX_SHADER);
     glShaderSource(vertexShader, 1, &vertexShaderSource, NULL);
@@ -60,21 +60,38 @@ int main()
     glDeleteShader(vertexShader);
     glDeleteShader(fragmentShader);
 
+    GLuint VAO = 0;
     GLuint VBO = 0;
 
+    glGenVertexArrays(1, &VAO);
     glGenBuffers(1, &VBO);
+    glBindVertexArray(VAO);
     glBindBuffer(GL_ARRAY_BUFFER, VBO);
+    glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
+    
+    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void*)0);
+    glEnableVertexAttribArray(0);
 
-    // to do
-
+    glBindBuffer(GL_ARRAY_BUFFER, 0);
+    glBindVertexArray(0);
 
     glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
     glClear(GL_COLOR_BUFFER_BIT);
     glfwSwapBuffers(window);
     while (!glfwWindowShouldClose(window))
     {
+        glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
+        glClear(GL_COLOR_BUFFER_BIT);
+        glUseProgram(shaderProgram);
+        glBindVertexArray(VAO);
+        glDrawArrays(GL_TRIANGLES, 0, 3);
+        glfwSwapBuffers(window);
         glfwPollEvents();
     }
+
+    glDeleteVertexArrays(1, &VAO);
+    glDeleteBuffers(1, &VBO);
+    glDeleteProgram(shaderProgram);
 
     glfwDestroyWindow(window);
     glfwTerminate();
